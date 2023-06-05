@@ -12,7 +12,6 @@ export const userColorRepository = {
       return 1;
     } else {
       userColorDict.white = userID;
-
       return 2;
     }
   },

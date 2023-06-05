@@ -44,7 +44,10 @@ const Home = () => {
   };
 
   useEffect(() => {
-    fetchBoard();
+    const cancelID = setInterval(fetchBoard, 500);
+    return () => {
+      clearInterval(cancelID);
+    };
   }, []);
 
   if (!board || !user) return <Loading visible />;

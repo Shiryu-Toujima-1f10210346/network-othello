@@ -6,6 +6,7 @@
   height: 100vh;
   min-height: 100vh;
   padding: 0 0.5rem;
+  background-color: rgb(14, 14, 14);
 }
 
 .main {
@@ -122,6 +123,7 @@
   background: green;
   display: grid;
   grid-template-columns: repeat(8, 1fr);
+  border-radius: 5%;
 }
 
 .cell {
@@ -140,6 +142,7 @@
 
 .turn {
   font-size: 100px;
+  color: white;
 }
 
 .pass {
@@ -153,7 +156,6 @@
 }
 
 .white {
-  background-color: black;
   color: white;
   font-size: 50px;
 }
