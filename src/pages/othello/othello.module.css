@@ -6,7 +6,7 @@
   height: 100vh;
   min-height: 100vh;
   padding: 0 0.5rem;
-  background-color: rgb(14, 14, 14);
+  background-color: rgb(89, 118, 145);
 }
 
 .main {
@@ -120,7 +120,7 @@
 .board {
   width: 640px;
   height: 640px;
-  background: green;
+  background: rgb(33, 150, 105);
   display: grid;
   grid-template-columns: repeat(8, 1fr);
   border-radius: 5%;
@@ -132,6 +132,7 @@
   width: 80px;
   height: 80px;
   border: 1px solid black;
+  border-radius: 10%;
 }
 
 .stone {
@@ -143,6 +144,7 @@
 .turn {
   font-size: 100px;
   color: white;
+  font-family: monospace;
 }
 
 .pass {

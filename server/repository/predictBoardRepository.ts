@@ -24,6 +24,7 @@ function canPlace(
   dx: number,
   dy: number
 ): boolean {
+  /*
   for (let c = 2; c < 7; c++) {
     if (!isValid(board, x + dx * c, y + dy * c) || board[x + dx * c][y + dy * c] === 0) {
       break;
@@ -59,7 +60,7 @@ function predict(board: BoardArr, turn: number): void {
       }
     }
   }
-}
+}*/
 
 export const predictedBoard = {
   predictBoard: (board: BoardArr, turn: number) => {

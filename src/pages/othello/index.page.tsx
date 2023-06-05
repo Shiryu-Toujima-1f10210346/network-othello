@@ -44,7 +44,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    const cancelID = setInterval(fetchBoard, 500);
+    const cancelID = setInterval(fetchBoard, 100);
     return () => {
       clearInterval(cancelID);
     };
@@ -66,7 +66,7 @@ const Home = () => {
                   className={styles.stone}
                   style={{
                     background:
-                      color === 0
+                      color === -1
                         ? 'transparent'
                         : color === 1
                         ? '#000'
