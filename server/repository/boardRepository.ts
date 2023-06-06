@@ -1,4 +1,5 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
+import { turnOverStonesRepository } from './turnOverStonesRepository';
 import { userColorRepository } from './userColorReoisitory';
 
 export type BoardArr = number[][];
@@ -32,7 +33,7 @@ export const boardRepository = {
       //クリックした場所が盤面内かつ空白の場合
       board[params.y][params.x] = userColorRepository.getUserColor(userId);
       //ここにひっくり返す処理を書く
-
+      turnOverStonesRepository.turnOverStones(params.x, params.y, turn);
       turn = 3 - turn; //1と2を入れ替える
 
       //ここに推測盤面を作る処理を書く

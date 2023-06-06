@@ -69,12 +69,12 @@ const Home = () => {
                       color === -1
                         ? 'transparent'
                         : color === 1
-                        ? '#000'
+                        ? '#000000e4'
                         : color === 2
-                        ? '#fff'
-                        : 'blue',
-                    height: color === 0 ? '30%' : '80%',
-                    width: color === 0 ? '30%' : '80%',
+                        ? '#fffffff2'
+                        : '#0400ff8d',
+                    height: color === 0 ? '20%' : '80%',
+                    width: color === 0 ? '20%' : '80%',
                   }}
                 />
               </div>

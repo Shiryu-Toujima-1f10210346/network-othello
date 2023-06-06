@@ -152,12 +152,13 @@
 }
 
 .black {
-  background-color: white;
+  font-family: serif;
   color: black;
   font-size: 50px;
 }
 
 .white {
+  font-family: serif;
   color: white;
   font-size: 50px;
 }
