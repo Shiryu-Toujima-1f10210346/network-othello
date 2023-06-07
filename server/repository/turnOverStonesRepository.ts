@@ -1,6 +1,4 @@
-import type { BoardArr } from './boardRepository';
-import { boardRepository } from './boardRepository';
-
+/*
 const board = boardRepository.getBoard();
 
 const direction = [
@@ -67,3 +65,6 @@ export const turnOverStonesRepository = {
     }
   },
 };
+
+
+*/

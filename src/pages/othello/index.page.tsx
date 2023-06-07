@@ -13,6 +13,8 @@ const Home = () => {
   const onClick = async (x: number, y: number) => {
     await apiClient.board.$post({ body: { x, y } });
     await fetchBoard();
+    //黒と白の個数を書き換える innnerHTML
+    
   };
   const [user] = useAtom(userAtom);
   const [label, setLabel] = useState('');
