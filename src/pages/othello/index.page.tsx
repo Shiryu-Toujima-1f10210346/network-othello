@@ -10,11 +10,11 @@ import { userAtom } from '../../atoms/user';
 import styles from './othello.module.css';
 
 const Home = () => {
+  const turn = apiClient.turn.$get().catch(returnNull);
+  //const turn = apiClient.turn.$get().catch(returnNull);
   const onClick = async (x: number, y: number) => {
     await apiClient.board.$post({ body: { x, y } });
     await fetchBoard();
-    //黒と白の個数を書き換える innnerHTML
-    
   };
   const [user] = useAtom(userAtom);
   const [label, setLabel] = useState('');
@@ -25,9 +25,9 @@ const Home = () => {
 
   const fetchBoard = async () => {
     const board = await apiClient.board.$get().catch(returnNull);
-
     if (board !== null) setBoard(board.board);
   };
+
   const createTask = async (e: FormEvent) => {
     e.preventDefault();
     if (!label) return;
@@ -46,7 +46,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    const cancelID = setInterval(fetchBoard, 100);
+    const cancelID = setInterval(fetchBoard, 500);
     return () => {
       clearInterval(cancelID);
     };
@@ -59,7 +59,7 @@ const Home = () => {
       <BasicHeader user={user} />
       <div className={styles.container}>
         <div className={styles.pass} />
-        <div className={styles.turn}>黒のターン</div>
+        <div className={styles.turn}  />
         <div className={styles.board}>
           {board.map((row, y) =>
             row.map((color, x) => (
@@ -74,7 +74,7 @@ const Home = () => {
                         ? '#000000e4'
                         : color === 2
                         ? '#fffffff2'
-                        : '#0400ff8d',
+                        : '#0400ff5c',
                     height: color === 0 ? '20%' : '80%',
                     width: color === 0 ? '20%' : '80%',
                   }}

@@ -51,6 +51,10 @@ const Home = () => {
         Welcome to frourio!
       </div>
 
+      <div className={styles.title}>
+        <a href="/othello">othello</a>
+      </div>
+
       <form style={{ textAlign: 'center', marginTop: '80px' }} onSubmit={createTask}>
         <input value={label} type="text" onChange={inputLabel} />
         <input type="submit" value="ADD" />
