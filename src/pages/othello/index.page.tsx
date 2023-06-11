@@ -10,11 +10,11 @@ import { userAtom } from '../../atoms/user';
 import styles from './othello.module.css';
 
 const Home = () => {
-  const turn = apiClient.turn.$get().catch(returnNull);
   //const turn = apiClient.turn.$get().catch(returnNull);
   const onClick = async (x: number, y: number) => {
     await apiClient.board.$post({ body: { x, y } });
     await fetchBoard();
+    await fetchTurn();
   };
   const [user] = useAtom(userAtom);
   const [label, setLabel] = useState('');
@@ -22,32 +22,25 @@ const Home = () => {
     setLabel(e.target.value);
   };
   const [board, setBoard] = useState<number[][]>();
-
+  const [turn, setTurn] = useState<number>();
   const fetchBoard = async () => {
     const board = await apiClient.board.$get().catch(returnNull);
     if (board !== null) setBoard(board.board);
   };
 
-  const createTask = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!label) return;
+  const fetchTurn = async () => {
+    const turn = await apiClient.turn.$get().catch(returnNull);
+    if (turn !== null) setTurn(turn.turn);
+  }
 
-    await apiClient.tasks.post({ body: { label } });
-    setLabel('');
-    await fetchBoard();
-  };
-  const toggleDone = async (task: TaskModel) => {
-    await apiClient.tasks._taskId(task.id).patch({ body: { done: !task.done } });
-    await fetchBoard();
-  };
-  const deleteTask = async (task: TaskModel) => {
-    await apiClient.tasks._taskId(task.id).delete();
-    await fetchBoard();
-  };
+
 
   useEffect(() => {
     const cancelID = setInterval(fetchBoard, 500);
+    const cancelID2 = setInterval(fetchTurn, 500);
+    console.log("interval start")
     return () => {
+      clearInterval(cancelID2);
       clearInterval(cancelID);
     };
   }, []);
@@ -59,7 +52,9 @@ const Home = () => {
       <BasicHeader user={user} />
       <div className={styles.container}>
         <div className={styles.pass} />
-        <div className={styles.turn}  />
+        <div className={styles.turn}>
+          {turn === 1 ? '黒のターン' : '白のターン'}
+        </div>
         <div className={styles.board}>
           {board.map((row, y) =>
             row.map((color, x) => (
