@@ -32,13 +32,13 @@ let turn = 1;
 export const boardUsecase = {
   getBoard: () => board,
   getTurn: () => turn,
-  clickBoard: (params: Pos, userId: UserId) => {
-    if (userColorUsecase.getUserColor(userId) === turn && board[params.y][params.x] === 0) {
+  clickBoard: (y:number,x:number, userId: UserId) => {
+    if (userColorUsecase.getUserColor(userId) === turn && board[y][x] === 0) {
       let newBoard = board;
       //クリックした場所が盤面内かつ空白の場合
-      board[params.y][params.x] = userColorUsecase.getUserColor(userId);
+      board[y][x] = userColorUsecase.getUserColor(userId);
       //ここにひっくり返す処理を書く
-      newBoard = turnOverStonesUsecase.turnOverStones(params.y, params.x, turn);
+      newBoard = turnOverStonesUsecase.turnOverStones(y,x, turn);
       turn = 3 - turn; //1と2を入れ替える
       
       //ここに推測盤面を作る処理を書く

@@ -30,6 +30,7 @@ export const roomUsecase = {
     return newRoom;
   },
   clickBoard: async (x : number, y : number, userId:UserId) : Promise<RoomModel> => {
+
     const latest = await roomsRepository.findLatest();
     assert(latest, "curl叩くな！");
     const newBoard:number[][] = JSON.parse(JSON.stringify(latest.board));

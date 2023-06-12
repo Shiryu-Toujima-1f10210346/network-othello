@@ -5,6 +5,6 @@ export type Methods = {
     resBody: RoomModel | null;
   };
   post: {
-    resBody: RoomModel
+    resBody: RoomModel;
   };
 };
