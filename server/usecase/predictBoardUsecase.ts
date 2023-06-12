@@ -1,5 +1,5 @@
-import type { BoardArr} from "./boardRepository";
-import { boardRepository } from "./boardRepository";
+import type { BoardArr} from "./boardUsecase";
+import { boardUsecase } from "./boardUsecase";
 
 
 const direction = [
@@ -69,7 +69,7 @@ function predict(turn: number ,newBoard: BoardArr) {
 
 export const predictedBoard = {
   predictBoard: (board: BoardArr, turn: number) => {
-    const newBoard = boardRepository.getBoard();
+    const newBoard = boardUsecase.getBoard();
     predict(3-turn,newBoard);
     return board;
   },

@@ -1,5 +1,5 @@
-import type { BoardArr } from './boardRepository';
-import { boardRepository } from './boardRepository';
+import type { BoardArr } from './boardUsecase';
+import { boardUsecase } from './boardUsecase';
 
 
 const direction = [
@@ -57,9 +57,9 @@ function turnOver(
   }
 }
 
-export const turnOverStonesRepository = {
+export const turnOverStonesUsecase = {
   turnOverStones: (x: number, y: number, turn: number) => {
-    const newBoard = boardRepository.getBoard();
+    const newBoard = boardUsecase.getBoard();
     for (const [dx, dy] of direction) {
       if (canPlace(newBoard, x, y, turn, dx, dy)) {
         turnOver(newBoard, x, y, turn, dx, dy);

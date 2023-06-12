@@ -12,27 +12,29 @@ import styles from './othello.module.css';
 const Home = () => {
   //const turn = apiClient.turn.$get().catch(returnNull);
   const onClick = async (x: number, y: number) => {
-    await apiClient.board.$post({ body: { x, y } });
+    await apiClient.rooms.board.$post({ body: { x, y } });
     await fetchBoard();
     await fetchTurn();
     
   };
   const [user] = useAtom(userAtom);
-  const [label, setLabel] = useState('');
-  const inputLabel = (e: ChangeEvent<HTMLInputElement>) => {
-    setLabel(e.target.value);
-  };
   const [board, setBoard] = useState<number[][]>();
   const [turn, setTurn] = useState<number>();
   
   const fetchBoard = async () => {
-    const board = await apiClient.board.$get().catch(returnNull);
+    const board = await apiClient.rooms.$get().catch(returnNull);
     console.log(board);
-    if (board !== null) setBoard(board.board);   
+    if (board === null) {
+      const newRoom = await apiClient.rooms.$post();
+      setBoard(newRoom.board);
+    }
+    else{ 
+      setBoard(board.board);  
+     }
     fetchCount();
   };
   const fetchCount = async () => {
-    const board = await apiClient.board.$get().catch(returnNull);
+    const board = await apiClient.rooms.$get().catch(returnNull);
     let black = 0;
     let white = 0;
     board?.board.forEach((row) => {

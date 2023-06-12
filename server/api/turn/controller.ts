@@ -1,7 +1,7 @@
-import { boardRepository } from '$/repository/boardRepository';
+import { boardUsecase } from '$/usecase/boardUsecase';
 import { defineController } from './$relay';
 
 export default defineController(() => ({
-  get: () => ({ status: 200, body: { turn: boardRepository.getTurn() } }),
+  get: () => ({ status: 200, body: { turn: boardUsecase.getTurn() } }),
   post: ({ body }) => ({ status: 200, body: { turn: body.turn } }),
 }));
