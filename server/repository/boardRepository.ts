@@ -43,6 +43,7 @@ export const boardRepository = {
       
       //ここに推測盤面を作る処理を書く
       newBoard = predictedBoard.predictBoard(newBoard, turn);
+      console.log("predicted");
       return newBoard;
     }
     return board;

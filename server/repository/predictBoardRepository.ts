@@ -14,18 +14,7 @@ const direction = [
 ];
 let pass = true;
 function predict(turn: number ,newBoard: BoardArr) {
-  
-  
-  const direction = [
-    [-1, -1],
-    [-1, 0],
-    [-1, 1],
-    [0, 1],
-    [1, 1],
-    [1, 0],
-    [1, -1],
-    [0, -1],
-  ];
+  pass = true;
 
   for (let a = 0; a < 8; a++) {
     for (let b = 0; b < 8; b++) {

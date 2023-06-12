@@ -24,11 +24,12 @@ const Home = () => {
   };
   const [board, setBoard] = useState<number[][]>();
   const [turn, setTurn] = useState<number>();
+  
   const fetchBoard = async () => {
     const board = await apiClient.board.$get().catch(returnNull);
     console.log(board);
     if (board !== null) setBoard(board.board);   
-    await fetchCount();
+    fetchCount();
   };
   const fetchCount = async () => {
     const board = await apiClient.board.$get().catch(returnNull);
@@ -39,8 +40,7 @@ const Home = () => {
         if (cell === 1) black++;
         if (cell === 2) white++;
       });
-    }
-    );
+    });
     document.getElementsByClassName(styles.black)[0].innerHTML = `黒:${black}個`;
     document.getElementsByClassName(styles.white)[0].innerHTML = `白:${white}個`;
   } 
@@ -56,8 +56,8 @@ const Home = () => {
     const cancelID2 = setInterval(fetchTurn, 500);
     console.log("interval start")
     return () => {
-      clearInterval(cancelID2);
       clearInterval(cancelID);
+      clearInterval(cancelID2);
     };
   }, []);
 
@@ -101,8 +101,8 @@ const Home = () => {
             ))
           )}
         </div>
-        <div className={styles.black}>黒:2個</div>
-        <div className={styles.white}>白:2個</div>
+        <div className={styles.black}>黒:個</div>
+        <div className={styles.white}>白:個</div>
       </div>
     </>
   );
