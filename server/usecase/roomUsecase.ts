@@ -5,6 +5,7 @@ import {randomUUID} from "crypto";
 import { userColorUsecase } from "./userColorUsecase";
 import type { UserId } from "$/commonTypesWithClient/branded";
 import assert from "assert";
+import { boardUsecase } from "./boardUsecase";
 
 const initBoard = ()=>[
   [-1, -1, -1, -1, -1, -1, -1, -1],
@@ -33,8 +34,7 @@ export const roomUsecase = {
 
     const latest = await roomsRepository.findLatest();
     assert(latest, "curl叩くな！");
-    const newBoard:number[][] = JSON.parse(JSON.stringify(latest.board));
-    newBoard[x][y] = userColorUsecase.getUserColor(userId);
+    const newBoard = boardUsecase.clickBoard(x, y, userId);
     const newRoom: RoomModel = { ...latest, board: newBoard };
     await roomsRepository.save(newRoom);
     return newRoom;
