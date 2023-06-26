@@ -1,6 +1,4 @@
-import type { TaskModel } from '$/commonTypesWithClient/models';
 import { useAtom } from 'jotai';
-import type { ChangeEvent, FormEvent } from 'react';
 import { useEffect, useState } from 'react';
 import { Loading } from 'src/components/Loading/Loading';
 import { BasicHeader } from 'src/pages/@components/BasicHeader/BasicHeader';
@@ -14,24 +12,21 @@ const Home = () => {
   const onClick = async (x: number, y: number) => {
     await apiClient.rooms.board.$post({ body: { x, y } });
     await fetchBoard();
-    await fetchTurn();
-    
   };
   const [user] = useAtom(userAtom);
   const [board, setBoard] = useState<number[][]>();
   const [turn, setTurn] = useState<number>();
-  
+
   const fetchBoard = async () => {
     const board = await apiClient.rooms.$get().catch(returnNull);
-    console.log(board);
     if (board === null) {
       const newRoom = await apiClient.rooms.$post();
       setBoard(newRoom.board);
+    } else {
+      setBoard(board.board);
     }
-    else{ 
-      setBoard(board.board);  
-     }
     fetchCount();
+    fetchTurn();
   };
   const fetchCount = async () => {
     const board = await apiClient.rooms.$get().catch(returnNull);
@@ -43,23 +38,22 @@ const Home = () => {
         if (cell === 2) white++;
       });
     });
+
     document.getElementsByClassName(styles.black)[0].innerHTML = `黒:${black}個`;
     document.getElementsByClassName(styles.white)[0].innerHTML = `白:${white}個`;
-  } 
+  };
   const fetchTurn = async () => {
-    const turn = await apiClient.turn.$get().catch(returnNull);
-    if (turn !== null) setTurn(turn.turn);
-  }
-
-
+    const response = await apiClient.rooms.board.$get().catch(returnNull);
+    console.log(response);
+    response == 1 ? setTurn(2) : setTurn(1);
+  };
 
   useEffect(() => {
     const cancelID = setInterval(fetchBoard, 500);
-    const cancelID2 = setInterval(fetchTurn, 500);
-    console.log("interval start")
+
+    console.log('interval start');
     return () => {
       clearInterval(cancelID);
-      clearInterval(cancelID2);
     };
   }, []);
 
@@ -70,15 +64,14 @@ const Home = () => {
       <BasicHeader user={user} />
       <div className={styles.container}>
         <div className={styles.pass} />
-        <div className={styles.turn}
-        style =
-        {{
-          color: turn === 1 ? '#000000e4' : '#fffffff2',
-        }}
+        <div
+          className={styles.turn}
+          style={{
+            color: turn === 1 ? '#000000e4' : '#fffffff2',
+          }}
         >
           {turn === 1 ? '黒' : '白'}
-          <span style = {{color: '#000000e4'}}>のターン</span>
-
+          <span style={{ color: '#000000e4' }}>のターン</span>
         </div>
         <div className={styles.board}>
           {board.map((row, y) =>
