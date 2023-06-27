@@ -1,3 +1,5 @@
+/* eslint-disable max-depth */
+
 import type { BoardArr } from './boardUsecase';
 
 const direction = [
@@ -28,12 +30,10 @@ function predict(turn: number, newBoard: BoardArr) {
           newBoard[a + t[0]] === undefined || //枠外ならスキップ
           newBoard[a + t[0]][b + t[1]] === undefined || //枠外ならスキップ
           newBoard[a + t[0]][b + t[1]] === -1 || //不可マスならスキップ
-          newBoard[a + t[0]][b + t[1]] !== turn //自分の色ならスキップ
+          newBoard[a + t[0]][b + t[1]] !== turn || //自分の色ならスキップ
+          newBoard[a + t[0]][b + t[1]] === 0 ///おけるマスならスキップ
         ) {
           //console.log(b, a, t, '方向はスキップ');
-          continue;
-        } else if (newBoard[a + t[0]][b + t[1]] === 0) {
-          //おけるマスならスキップ
 
           continue;
         } else {

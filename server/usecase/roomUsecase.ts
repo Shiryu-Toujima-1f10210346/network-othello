@@ -34,8 +34,6 @@ export const roomUsecase = {
     const room = await roomsRepository.findRoom(roomId);
     assert(room, 'curl叩くな！');
     const newBoard = await boardUsecase.clickBoard(x, y, room, userId);
-    console.log('roomUsecase↓');
-    console.table(newBoard);
     const newRoom: RoomModel = { ...room, board: newBoard, status: 'playing' };
     await roomsRepository.save(newRoom);
     return newRoom;

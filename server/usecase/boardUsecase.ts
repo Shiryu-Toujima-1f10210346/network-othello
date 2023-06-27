@@ -1,3 +1,4 @@
+/* eslint-disable max-depth */
 import type { UserId } from '$/commonTypesWithClient/branded';
 import type { RoomModel } from '$/commonTypesWithClient/models';
 import { roomsRepository } from '$/repository/roomsRepository';
@@ -24,6 +25,19 @@ export const boardUsecase = {
       await roomsRepository.save(newRoom);
       //ここに推測盤面を作る処理を書く
       newBoard = predictedBoard.predictBoard(newBoard, room.turn);
+      //boardに0がなかったら
+      if (newBoard.every((row) => row.every((cell) => cell !== 0))) {
+        room.turn = 3 - room.turn; //1と2を入れ替える
+        let newRoom: RoomModel = { ...room, turn: room.turn, status: 'playing' };
+        newBoard = predictedBoard.predictBoard(newBoard, room.turn);
+        //もう一度0がなかったら
+        if (newBoard.every((row) => row.every((cell) => cell !== 0))) {
+          //ゲーム終了
+          newRoom = { ...room, status: 'ended' };
+        }
+        console.log('newRoom');
+        await roomsRepository.save(newRoom);
+      }
       return newBoard;
     }
     return room.board;

@@ -53,7 +53,7 @@ const Home = () => {
     setWhite(white);
   };
   const fetchTurn = async (room: RoomModel | null) => {
-    room?.turn === 1 ? setTurn(2) : setTurn(1);
+    room?.turn === 1 ? setTurn(1) : setTurn(2);
   };
 
   useEffect(() => {
