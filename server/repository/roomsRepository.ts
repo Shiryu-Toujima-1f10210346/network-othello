@@ -31,9 +31,11 @@ export const roomsRepository = {
     return room && toRoomModel(room);
   },
   findRoom: async (roomId: string): Promise<RoomModel | null> => {
+    //roomIdが一致するroomを取得
     const room = await prismaClient.room.findFirst({
-      where: { roomId },
+      where: { roomId: roomIdParser.parse(roomId) },
     });
+
     return room && toRoomModel(room);
   },
 };

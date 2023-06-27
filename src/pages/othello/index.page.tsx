@@ -1,4 +1,5 @@
 import { useAtom } from 'jotai';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Loading } from 'src/components/Loading/Loading';
 import { BasicHeader } from 'src/pages/@components/BasicHeader/BasicHeader';
@@ -13,13 +14,15 @@ const Home = () => {
     await apiClient.rooms.board.$post({ body: { x, y } });
     await fetchBoard();
   };
+  const router = useRouter();
   const [user] = useAtom(userAtom);
   const [board, setBoard] = useState<number[][]>();
   const [turn, setTurn] = useState<number>();
   const [roomId, setRoomId] = useState<string>();
-
   const fetchBoard = async () => {
-    const board = await apiClient.rooms.$get().catch(returnNull);
+    const roomId = router.query.labels as string;
+    const board = await apiClient.rooms.$get({ query: { roomId } }).catch(returnNull);
+    console.table(board);
     if (board === null) {
       const newRoom = await apiClient.rooms.$post();
       setBoard(newRoom.board);
