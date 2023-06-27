@@ -16,6 +16,7 @@ const Home = () => {
   const [user] = useAtom(userAtom);
   const [board, setBoard] = useState<number[][]>();
   const [turn, setTurn] = useState<number>();
+  const [roomId, setRoomId] = useState<string>();
 
   const fetchBoard = async () => {
     const board = await apiClient.rooms.$get().catch(returnNull);
@@ -30,6 +31,7 @@ const Home = () => {
   };
   const fetchCount = async () => {
     const board = await apiClient.rooms.$get().catch(returnNull);
+    setRoomId(board?.id);
     let black = 0;
     let white = 0;
     board?.board.forEach((row) => {
@@ -45,7 +47,7 @@ const Home = () => {
   const fetchTurn = async () => {
     const response = await apiClient.rooms.board.$get().catch(returnNull);
     console.log(response);
-    response == 1 ? setTurn(2) : setTurn(1);
+    response === 1 ? setTurn(2) : setTurn(1);
   };
 
   useEffect(() => {
@@ -63,6 +65,7 @@ const Home = () => {
     <>
       <BasicHeader user={user} />
       <div className={styles.container}>
+        <div className={styles.id}>Room ID: {roomId}</div>
         <div className={styles.pass} />
         <div
           className={styles.turn}
