@@ -1,5 +1,4 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
-import { roomsRepository } from '$/repository/roomsRepository';
 import { predictedBoard } from './predictBoardUsecase';
 import { turnOverStonesUsecase } from './turnOverStonesUsecase';
 import { userColorUsecase } from './userColorUsecase';
@@ -34,7 +33,7 @@ export const boardUsecase = {
   getTurn: () => turn,
   clickBoard: (y: number, x: number, roomId: string, userId: UserId) => {
     if (userColorUsecase.getUserColor(userId) === turn && board[y][x] === 0) {
-      let newBoard = roomsRepository.findRoom(roomId).board;
+      let newBoard: BoardArr = board;
       //クリックした場所が盤面内かつ空白の場合
       board[y][x] = userColorUsecase.getUserColor(userId);
       //ここにひっくり返す処理を書く

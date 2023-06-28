@@ -33,8 +33,8 @@ export const roomUsecase = {
   clickBoard: async (x: number, y: number, roomId: string, userId: UserId): Promise<RoomModel> => {
     const latest = await roomsRepository.findRoom(roomId);
     assert(latest, 'curl叩くな！');
-    const newBoard = boardUsecase.clickBoard(x, y, userId);
-    const newRoom: RoomModel = { ...latest, board: newBoard };
+    const newBoard = boardUsecase.clickBoard(x, y, roomId, userId);
+    const newRoom: RoomModel = { ...latest, board: newBoard, status: 'playing' };
     await roomsRepository.save(newRoom);
     return newRoom;
   },
