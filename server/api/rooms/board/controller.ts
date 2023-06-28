@@ -4,11 +4,10 @@ import { defineController } from './$relay';
 export default defineController(() => ({
   post: async ({ body, user }) => ({
     status: 201,
-    body: await roomUsecase.clickBoard(body.y, body.x, user.id),
+    body: await roomUsecase.clickBoard(body.y, body.x, body.roomId, user.id),
   }),
   get: async () => ({
     status: 200,
-
     body: await boardUsecase.getTurn(),
   }),
 }));

@@ -11,7 +11,8 @@ import styles from './othello.module.css';
 const Home = () => {
   //const turn = apiClient.turn.$get().catch(returnNull);
   const onClick = async (x: number, y: number) => {
-    await apiClient.rooms.board.$post({ body: { x, y } });
+    const roomId = router.query.labels as string;
+    await apiClient.rooms.board.$post({ body: { x, y, roomId } });
     await fetchBoard();
   };
   const router = useRouter();
@@ -21,11 +22,12 @@ const Home = () => {
   const [roomId, setRoomId] = useState<string>();
   const fetchBoard = async () => {
     const roomId = router.query.labels as string;
+    if (roomId === undefined) return;
     const board = await apiClient.rooms.$get({ query: { roomId } }).catch(returnNull);
     console.table(board);
     if (board === null) {
-      const newRoom = await apiClient.rooms.$post();
-      setBoard(newRoom.board);
+      // const newRoom = await apiClient.rooms.$post();
+      // setBoard(newRoom.board);
     } else {
       setBoard(board.board);
     }

@@ -5,7 +5,7 @@ export type Methods = {
     resBody: RoomModel | null;
   };
   post: {
-    reqBody: {x: number; y: number};
-    resBody: RoomModel
+    reqBody: { x: number; y: number; roomId: string };
+    resBody: RoomModel;
   };
 };
