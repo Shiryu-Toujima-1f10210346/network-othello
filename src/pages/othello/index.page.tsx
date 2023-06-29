@@ -1,3 +1,4 @@
+import type { RoomModel } from '$/commonTypesWithClient/models';
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -21,22 +22,24 @@ const Home = () => {
   const [board, setBoard] = useState<number[][]>();
   const [turn, setTurn] = useState<number>();
   const [roomId, setRoomId] = useState<string>();
+  const [black, setBlack] = useState<number>();
+  const [white, setWhite] = useState<number>();
+
   const fetchBoard = async () => {
     const roomId = router.query.labels as string;
     if (roomId === undefined) return;
     const room = await apiClient.rooms.$get({ query: { roomId } }).catch(returnNull);
-    console.table(board);
+    console.table(room);
     if (room === null) {
       // const newRoom = await apiClient.rooms.$post();
       // setBoard(newRoom.board);
     } else {
       setBoard(room.board);
     }
-    fetchCount();
+    fetchCount(room);
     fetchTurn();
   };
-  const fetchCount = async () => {
-    const room = await apiClient.rooms.$get().catch(returnNull);
+  const fetchCount = async (room: RoomModel | null) => {
     setRoomId(room?.id);
     let black = 0;
     let white = 0;
@@ -46,9 +49,8 @@ const Home = () => {
         if (cell === 2) white++;
       });
     });
-
-    // document.getElementsByClassName(styles.black)[0].innerHTML = `黒:${black}個`;
-    // document.getElementsByClassName(styles.white)[0].innerHTML = `白:${white}個`;
+    setBlack(black);
+    setWhite(white);
   };
   const fetchTurn = async () => {
     const response = await apiClient.rooms.board.$get().catch(returnNull);
@@ -105,8 +107,8 @@ const Home = () => {
             ))
           )}
         </div>
-        <div className={styles.black}>黒:個</div>
-        <div className={styles.white}>白:個</div>
+        <div className={styles.black}>黒:{black}個</div>
+        <div className={styles.white}>白:{white}個</div>
       </div>
     </>
   );

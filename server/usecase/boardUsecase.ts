@@ -20,14 +20,12 @@ export const boardUsecase = {
       //ここにひっくり返す処理を書く
       newBoard = turnOverStonesUsecase.turnOverStones(y, x, room.turn, newBoard);
       room.turn = 3 - room.turn; //1と2を入れ替える
-      await roomsRepository.save(room);
+      const newRoom: RoomModel = { ...room, turn: room.turn };
+      await roomsRepository.save(newRoom);
       //ここに推測盤面を作る処理を書く
       newBoard = predictedBoard.predictBoard(newBoard, room.turn);
-      console.log('predicted↓');
-      console.table(newBoard);
       return newBoard;
     }
-    console.log('not predicted');
     return room.board;
   },
 };
