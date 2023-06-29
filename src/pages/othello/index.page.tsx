@@ -37,7 +37,7 @@ const Home = () => {
       setBoard(room.board);
     }
     fetchCount(room);
-    fetchTurn();
+    fetchTurn(room);
   };
   const fetchCount = async (room: RoomModel | null) => {
     setRoomId(room?.id);
@@ -52,10 +52,8 @@ const Home = () => {
     setBlack(black);
     setWhite(white);
   };
-  const fetchTurn = async () => {
-    const response = await apiClient.rooms.board.$get().catch(returnNull);
-    console.log(response);
-    response === 1 ? setTurn(2) : setTurn(1);
+  const fetchTurn = async (room: RoomModel | null) => {
+    room?.turn === 1 ? setTurn(2) : setTurn(1);
   };
 
   useEffect(() => {
