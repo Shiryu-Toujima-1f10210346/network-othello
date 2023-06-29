@@ -33,7 +33,9 @@ export const roomUsecase = {
   clickBoard: async (x: number, y: number, roomId: string, userId: UserId): Promise<RoomModel> => {
     const room = await roomsRepository.findRoom(roomId);
     assert(room, 'curl叩くな！');
-    const newBoard = boardUsecase.clickBoard(x, y, room, userId);
+    const newBoard = await boardUsecase.clickBoard(x, y, room, userId);
+    console.log('roomUsecase↓');
+    console.table(newBoard);
     const newRoom: RoomModel = { ...room, board: newBoard, status: 'playing' };
     await roomsRepository.save(newRoom);
     return newRoom;

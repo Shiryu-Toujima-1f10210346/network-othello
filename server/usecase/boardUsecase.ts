@@ -23,9 +23,11 @@ export const boardUsecase = {
       await roomsRepository.save(room);
       //ここに推測盤面を作る処理を書く
       newBoard = predictedBoard.predictBoard(newBoard, room.turn);
-      console.log('predicted');
+      console.log('predicted↓');
+      console.table(newBoard);
       return newBoard;
     }
+    console.log('not predicted');
     return room.board;
   },
 };
