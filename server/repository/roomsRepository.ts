@@ -35,7 +35,6 @@ export const roomsRepository = {
     const room = await prismaClient.room.findFirst({
       where: { roomId: roomIdParser.parse(roomId) },
     });
-
     return room && toRoomModel(room);
   },
 };

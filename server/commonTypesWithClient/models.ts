@@ -15,9 +15,9 @@ export type TaskModel = {
 };
 
 export type RoomModel = {
-  id:RoomId;
+  id: RoomId;
   board: number[][];
-  status : "waiting" | "playing" | "ended";
+  status: 'waiting' | 'playing' | 'ended';
   created: number;
-  turn:number;
+  turn: number;
 };

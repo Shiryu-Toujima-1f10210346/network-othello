@@ -46,8 +46,8 @@ const Home = () => {
       });
     });
 
-    document.getElementsByClassName(styles.black)[0].innerHTML = `黒:${black}個`;
-    document.getElementsByClassName(styles.white)[0].innerHTML = `白:${white}個`;
+    // document.getElementsByClassName(styles.black)[0].innerHTML = `黒:${black}個`;
+    // document.getElementsByClassName(styles.white)[0].innerHTML = `白:${white}個`;
   };
   const fetchTurn = async () => {
     const response = await apiClient.rooms.board.$get().catch(returnNull);

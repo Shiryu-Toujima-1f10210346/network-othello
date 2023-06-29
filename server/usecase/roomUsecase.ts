@@ -31,10 +31,10 @@ export const roomUsecase = {
     return newRoom;
   },
   clickBoard: async (x: number, y: number, roomId: string, userId: UserId): Promise<RoomModel> => {
-    const latest = await roomsRepository.findRoom(roomId);
-    assert(latest, 'curl叩くな！');
-    const newBoard = boardUsecase.clickBoard(x, y, roomId, userId);
-    const newRoom: RoomModel = { ...latest, board: newBoard, status: 'playing' };
+    const room = await roomsRepository.findRoom(roomId);
+    assert(room, 'curl叩くな！');
+    const newBoard = boardUsecase.clickBoard(x, y, room, userId);
+    const newRoom: RoomModel = { ...room, board: newBoard, status: 'playing' };
     await roomsRepository.save(newRoom);
     return newRoom;
   },

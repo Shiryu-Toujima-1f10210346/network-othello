@@ -1,6 +1,4 @@
-import type { BoardArr} from "./boardUsecase";
-import { boardUsecase } from "./boardUsecase";
-
+import type { BoardArr } from './boardUsecase';
 
 const direction = [
   [-1, -1],
@@ -13,7 +11,7 @@ const direction = [
   [0, -1],
 ];
 let pass = true;
-function predict(turn: number ,newBoard: BoardArr) {
+function predict(turn: number, newBoard: BoardArr) {
   pass = true;
 
   for (let a = 0; a < 8; a++) {
@@ -69,8 +67,7 @@ function predict(turn: number ,newBoard: BoardArr) {
 
 export const predictedBoard = {
   predictBoard: (board: BoardArr, turn: number) => {
-    const newBoard = boardUsecase.getBoard();
-    predict(3-turn,newBoard);
+    predict(3 - turn, board);
     return board;
   },
 };
