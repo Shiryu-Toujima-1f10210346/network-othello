@@ -1,6 +1,6 @@
-import type { BoardArr} from "./boardRepository";
-import { boardRepository } from "./boardRepository";
+/* eslint-disable max-depth */
 
+import type { BoardArr } from './boardUsecase';
 
 const direction = [
   [-1, -1],
@@ -13,7 +13,7 @@ const direction = [
   [0, -1],
 ];
 let pass = true;
-function predict(turn: number ,newBoard: BoardArr) {
+function predict(turn: number, newBoard: BoardArr) {
   pass = true;
 
   for (let a = 0; a < 8; a++) {
@@ -30,12 +30,10 @@ function predict(turn: number ,newBoard: BoardArr) {
           newBoard[a + t[0]] === undefined || //枠外ならスキップ
           newBoard[a + t[0]][b + t[1]] === undefined || //枠外ならスキップ
           newBoard[a + t[0]][b + t[1]] === -1 || //不可マスならスキップ
-          newBoard[a + t[0]][b + t[1]] !== turn //自分の色ならスキップ
+          newBoard[a + t[0]][b + t[1]] !== turn || //自分の色ならスキップ
+          newBoard[a + t[0]][b + t[1]] === 0 ///おけるマスならスキップ
         ) {
           //console.log(b, a, t, '方向はスキップ');
-          continue;
-        } else if (newBoard[a + t[0]][b + t[1]] === 0) {
-          //おけるマスならスキップ
 
           continue;
         } else {
@@ -69,8 +67,7 @@ function predict(turn: number ,newBoard: BoardArr) {
 
 export const predictedBoard = {
   predictBoard: (board: BoardArr, turn: number) => {
-    const newBoard = boardRepository.getBoard();
-    predict(3-turn,newBoard);
+    predict(3 - turn, board);
     return board;
   },
 };

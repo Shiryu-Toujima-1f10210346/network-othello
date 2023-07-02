@@ -1,6 +1,6 @@
-import type { TaskModel } from '$/commonTypesWithClient/models';
+import type { RoomModel } from '$/commonTypesWithClient/models';
 import { useAtom } from 'jotai';
-import type { ChangeEvent, FormEvent } from 'react';
+import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { Loading } from 'src/components/Loading/Loading';
 import { BasicHeader } from 'src/pages/@components/BasicHeader/BasicHeader';
@@ -12,52 +12,56 @@ import styles from './othello.module.css';
 const Home = () => {
   //const turn = apiClient.turn.$get().catch(returnNull);
   const onClick = async (x: number, y: number) => {
-    await apiClient.board.$post({ body: { x, y } });
+    const roomId = router.query.labels as string;
+    await apiClient.rooms.board.$post({ body: { x, y, roomId } });
     await fetchBoard();
-    await fetchTurn();
-    
+    console.table(board);
   };
+  const router = useRouter();
   const [user] = useAtom(userAtom);
-  const [label, setLabel] = useState('');
-  const inputLabel = (e: ChangeEvent<HTMLInputElement>) => {
-    setLabel(e.target.value);
-  };
   const [board, setBoard] = useState<number[][]>();
   const [turn, setTurn] = useState<number>();
-  
+  const [roomId, setRoomId] = useState<string>();
+  const [black, setBlack] = useState<number>();
+  const [white, setWhite] = useState<number>();
+
   const fetchBoard = async () => {
-    const board = await apiClient.board.$get().catch(returnNull);
-    console.log(board);
-    if (board !== null) setBoard(board.board);   
-    fetchCount();
+    const roomId = router.query.labels as string;
+    if (roomId === undefined) return;
+    const room = await apiClient.rooms.$get({ query: { roomId } }).catch(returnNull);
+    console.table(room);
+    if (room === null) {
+      // const newRoom = await apiClient.rooms.$post();
+      // setBoard(newRoom.board);
+    } else {
+      setBoard(room.board);
+    }
+    fetchCount(room);
+    fetchTurn(room);
   };
-  const fetchCount = async () => {
-    const board = await apiClient.board.$get().catch(returnNull);
+  const fetchCount = async (room: RoomModel | null) => {
+    setRoomId(room?.id);
     let black = 0;
     let white = 0;
-    board?.board.forEach((row) => {
+    room?.board.forEach((row) => {
       row.forEach((cell) => {
         if (cell === 1) black++;
         if (cell === 2) white++;
       });
     });
-    document.getElementsByClassName(styles.black)[0].innerHTML = `黒:${black}個`;
-    document.getElementsByClassName(styles.white)[0].innerHTML = `白:${white}個`;
-  } 
-  const fetchTurn = async () => {
-    const turn = await apiClient.turn.$get().catch(returnNull);
-    if (turn !== null) setTurn(turn.turn);
-  }
-
-
+    setBlack(black);
+    setWhite(white);
+  };
+  const fetchTurn = async (room: RoomModel | null) => {
+    room?.turn === 1 ? setTurn(1) : setTurn(2);
+  };
 
   useEffect(() => {
     const cancelID = setInterval(fetchBoard, 500);
-    const cancelID2 = setInterval(fetchTurn, 500);
-    console.log("interval start")
+
+    console.log('interval start');
     return () => {
       clearInterval(cancelID);
-      clearInterval(cancelID2);
     };
   }, []);
 
@@ -67,16 +71,16 @@ const Home = () => {
     <>
       <BasicHeader user={user} />
       <div className={styles.container}>
+        <div className={styles.id}>Room ID: {roomId}</div>
         <div className={styles.pass} />
-        <div className={styles.turn}
-        style =
-        {{
-          color: turn === 1 ? '#000000e4' : '#fffffff2',
-        }}
+        <div
+          className={styles.turn}
+          style={{
+            color: turn === 1 ? '#000000e4' : '#fffffff2',
+          }}
         >
           {turn === 1 ? '黒' : '白'}
-          <span style = {{color: '#000000e4'}}>のターン</span>
-
+          <span style={{ color: '#000000e4' }}>のターン</span>
         </div>
         <div className={styles.board}>
           {board.map((row, y) =>
@@ -101,8 +105,8 @@ const Home = () => {
             ))
           )}
         </div>
-        <div className={styles.black}>黒:個</div>
-        <div className={styles.white}>白:個</div>
+        <div className={styles.black}>黒:{black}個</div>
+        <div className={styles.white}>白:{white}個</div>
       </div>
     </>
   );

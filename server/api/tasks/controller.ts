@@ -1,7 +1,11 @@
-import { createTask, getTasks } from '$/repository/tasksRepository';
+import { roomsRepository } from '$/repository/roomsRepository';
 import { defineController } from './$relay';
 
 export default defineController(() => ({
-  get: async ({ query }) => ({ status: 200, body: await getTasks(query?.limit) }),
-  post: async ({ body }) => ({ status: 201, body: await createTask(body.label) }),
+  get: async ({ params }) => ({
+    status: 200,
+    body: await roomsRepository.findRoom(params.roomId),
+  }),
+
+  post: async ({ body }) => ({ status: 201, body: await roomsRepository.findRoom(body.label) }),
 }));

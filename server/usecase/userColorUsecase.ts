@@ -1,7 +1,7 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
 
 const userColorDict: { black?: UserId; white?: UserId } = {};
-export const userColorRepository = {
+export const userColorUsecase = {
   getUserColor: (userID: UserId): number => {
     if (userColorDict.black === userID) {
       return 1;
