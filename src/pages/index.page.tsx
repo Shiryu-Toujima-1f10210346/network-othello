@@ -13,6 +13,7 @@ const Home = () => {
   const [tasks, setTasks] = useState<RoomModel[] | undefined>(undefined);
 
   const fetchTasks = async () => {
+    console.log('fetchTasks');
     const tasks = await apiClient.tasks.$get().catch(returnNull);
     console.table(tasks);
     if (tasks !== null) setTasks(tasks);
@@ -26,7 +27,7 @@ const Home = () => {
 
   const createRooms = async () => {
     console.log('createRooms');
-    await apiClient.tasks.$post();
+    await apiClient.rooms.$post();
     await fetchTasks();
   };
 
@@ -40,13 +41,10 @@ const Home = () => {
     <>
       <BasicHeader user={user} />
       <div className={styles.title} style={{ marginTop: '160px' }}>
-        Welcome to frourio!
+        FrouriOthelloParty!!!
       </div>
       <div className={styles.title} onClick={createRooms}>
         ルーム作成
-      </div>
-      <div className={styles.title}>
-        <a href="/othello">othello</a>
       </div>
       <div className={styles.title}>
         <a href="/lobby">lobby</a>
@@ -55,6 +53,20 @@ const Home = () => {
         {tasks.map(
           (task) =>
             task.status !== 'ended' && (
+              <li key={task.id}>
+                <a href={`/othello?labels=${task.id}`}>
+                  {task.id}
+                  <div>{task.status}</div>
+                </a>
+              </li>
+            )
+        )}
+        <div className={styles.title}>終試合</div>
+      </ul>
+      <ul className={styles.tasks}>
+        {tasks.map(
+          (task) =>
+            task.status === 'ended' && (
               <li key={task.id}>
                 <a href={`/othello?labels=${task.id}`}>
                   {task.id}

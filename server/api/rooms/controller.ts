@@ -3,9 +3,9 @@ import { roomUsecase } from '$/usecase/roomUsecase';
 import { defineController } from './$relay';
 
 export default defineController(() => ({
-  get: async ({ query: { roomId } }) => ({
+  get: async ({ query: { roomId, UserId } }) => ({
     status: 200,
-    body: await roomsRepository.findRoom(roomId),
+    body: await roomsRepository.findRoom(roomId, UserId),
   }),
 
   post: async () => ({

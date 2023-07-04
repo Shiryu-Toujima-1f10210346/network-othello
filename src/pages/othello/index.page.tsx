@@ -15,7 +15,6 @@ const Home = () => {
     const roomId = router.query.labels as string;
     await apiClient.rooms.board.$post({ body: { x, y, roomId } });
     await fetchBoard();
-    console.table(board);
   };
   const router = useRouter();
   const [user] = useAtom(userAtom);
@@ -26,16 +25,20 @@ const Home = () => {
   const [white, setWhite] = useState<number>();
 
   const fetchBoard = async () => {
+    console.log('fetchBoard');
     const roomId = router.query.labels as string;
-    if (roomId === undefined) return;
-    const room = await apiClient.rooms.$get({ query: { roomId } }).catch(returnNull);
-    console.table(room);
+    if (roomId === null) return;
+    if (user === null) return;
+    const UserId = user.id;
+    const room = await apiClient.rooms.$get({ query: { roomId, UserId } }).catch(returnNull);
+
     if (room === null) {
       // const newRoom = await apiClient.rooms.$post();
       // setBoard(newRoom.board);
     } else {
       setBoard(room.board);
     }
+    console.table(room);
     fetchCount(room);
     fetchTurn(room);
   };

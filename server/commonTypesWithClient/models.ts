@@ -20,4 +20,6 @@ export type RoomModel = {
   status: 'waiting' | 'playing' | 'ended';
   created: number;
   turn: number;
+  blackUserId: UserId | null;
+  whiteUserId: UserId | null;
 };

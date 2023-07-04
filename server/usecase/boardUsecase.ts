@@ -13,11 +13,12 @@ export const boardUsecase = {
   getBoard: (room: RoomModel) => room.board,
   getTurn: (room: RoomModel) => room.turn,
   clickBoard: async (y: number, x: number, room: RoomModel, userId: UserId) => {
-    if (userColorUsecase.getUserColor(userId) === room.turn && room.board[y][x] === 0) {
+    const userColor = await userColorUsecase.getUserColor(userId, room);
+    if (userColor === room.turn && room.board[y][x] === 0) {
       //roomのboardを更新する
       let newBoard = boardUsecase.getBoard(room);
       //クリックした場所が盤面内かつ空白の場合
-      newBoard[y][x] = userColorUsecase.getUserColor(userId);
+      newBoard[y][x] = userColor;
       //ここにひっくり返す処理を書く
       newBoard = turnOverStonesUsecase.turnOverStones(y, x, room.turn, newBoard);
       room.turn = 3 - room.turn; //1と2を入れ替える
