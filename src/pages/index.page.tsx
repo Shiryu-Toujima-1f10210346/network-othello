@@ -1,6 +1,5 @@
-import type { TaskModel } from '$/commonTypesWithClient/models';
+import type { RoomModel } from '$/commonTypesWithClient/models';
 import { useAtom } from 'jotai';
-import type { ChangeEvent, FormEvent } from 'react';
 import { useEffect, useState } from 'react';
 import { Loading } from 'src/components/Loading/Loading';
 import { BasicHeader } from 'src/pages/@components/BasicHeader/BasicHeader';
@@ -11,32 +10,19 @@ import styles from './index.module.css';
 
 const Home = () => {
   const [user] = useAtom(userAtom);
-  const [tasks, setTasks] = useState<TaskModel[] | undefined>(undefined);
-  const [label, setLabel] = useState('');
-  const inputLabel = (e: ChangeEvent<HTMLInputElement>) => {
-    setLabel(e.target.value);
-  };
+  const [tasks, setTasks] = useState<RoomModel[] | undefined>(undefined);
+
   const fetchTasks = async () => {
     const tasks = await apiClient.tasks.$get().catch(returnNull);
-
+    console.table(tasks);
     if (tasks !== null) setTasks(tasks);
   };
-  const createTask = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!label) return;
-
-    await apiClient.tasks.post({ body: { label } });
-    setLabel('');
-    await fetchTasks();
-  };
-  const toggleDone = async (task: TaskModel) => {
-    await apiClient.tasks._taskId(task.id).patch({ body: { done: !task.done } });
-    await fetchTasks();
-  };
-  const deleteTask = async (task: TaskModel) => {
-    await apiClient.tasks._taskId(task.id).delete();
-    await fetchTasks();
-  };
+  // const createRoom = async (e: FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   await apiClient.tasks.$post({ body: { label } });
+  //   await fetchTasks();
+  //   setLabel('');
+  // };
 
   useEffect(() => {
     fetchTasks();
@@ -54,24 +40,16 @@ const Home = () => {
       <div className={styles.title}>
         <a href="/othello">othello</a>
       </div>
-
-      <form style={{ textAlign: 'center', marginTop: '80px' }} onSubmit={createTask}>
-        <input value={label} type="text" onChange={inputLabel} />
-        <input type="submit" value="ADD" />
-      </form>
+      <div className={styles.title}>
+        <a href="/lobby">lobby</a>
+      </div>
       <ul className={styles.tasks}>
         {tasks.map((task) => (
           <li key={task.id}>
-            <label>
-              <input type="checkbox" checked={task.done} onChange={() => toggleDone(task)} />
-              <span>{task.label}</span>
-            </label>
-            <input
-              type="button"
-              value="DELETE"
-              className={styles.deleteBtn}
-              onClick={() => deleteTask(task)}
-            />
+            <a href={`/othello?labels=${task.id}`}>
+              {task.id}
+              <div>{task.status}</div>
+            </a>
           </li>
         ))}
       </ul>

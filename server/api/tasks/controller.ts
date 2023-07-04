@@ -1,11 +1,14 @@
 import { roomsRepository } from '$/repository/roomsRepository';
+import { roomUsecase } from '$/usecase/roomUsecase';
 import { defineController } from './$relay';
 
 export default defineController(() => ({
-  get: async ({ params }) => ({
+  get: async () => ({
     status: 200,
-    body: await roomsRepository.findRoom(params.roomId),
+    body: await roomsRepository.findAll(),
   }),
-
-  post: async ({ body }) => ({ status: 201, body: await roomsRepository.findRoom(body.label) }),
+  post: async () => ({
+    status: 201,
+    body: await roomUsecase.create(),
+  }),
 }));

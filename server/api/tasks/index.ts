@@ -1,15 +1,11 @@
-import type { TaskModel } from '$/commonTypesWithClient/models';
+import type { RoomModel } from '$/commonTypesWithClient/models';
 
 export type Methods = {
   get: {
-    query?: {
-      limit?: number;
-    };
-
-    resBody: TaskModel[];
+    resBody: RoomModel[];
   };
   post: {
-    reqBody: Pick<TaskModel, 'label'>;
-    resBody: TaskModel;
+    reqBody: { label: string };
+    resBody: RoomModel;
   };
 };

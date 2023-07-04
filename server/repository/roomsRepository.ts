@@ -37,4 +37,10 @@ export const roomsRepository = {
     });
     return room && toRoomModel(room);
   },
+  findAll: async (): Promise<RoomModel[]> => {
+    const rooms = await prismaClient.room.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
+    return rooms.map(toRoomModel);
+  },
 };
