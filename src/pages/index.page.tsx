@@ -41,15 +41,13 @@ const Home = () => {
     <>
       <BasicHeader user={user} />
       <div className={styles.title} style={{ marginTop: '160px' }}>
-        FrouriOthelloParty!!!
+        欢迎访问! 特别感谢!
       </div>
       <div className={styles.title} onClick={createRooms}>
-        ルーム作成
-      </div>
-      <div className={styles.title}>
-        <a href="/lobby">lobby</a>
+        部屋建筑!
       </div>
       <ul className={styles.tasks}>
+        部屋一覧!
         {tasks.map(
           (task) =>
             task.status !== 'ended' && (
@@ -61,7 +59,8 @@ const Home = () => {
               </li>
             )
         )}
-        <div className={styles.title}>終試合</div>
+        <div className={styles.title}>終試合一覧！</div>
+        <img src="https://ev-media.net/wp-content/uploads/2019/03/img_0e05202cec83ca7da073a3717d1986ea17110.jpg" />
       </ul>
       <ul className={styles.tasks}>
         {tasks.map(
