@@ -24,6 +24,12 @@ const Home = () => {
   //   setLabel('');
   // };
 
+  const createRooms = async () => {
+    console.log('createRooms');
+    await apiClient.tasks.$post();
+    await fetchTasks();
+  };
+
   useEffect(() => {
     fetchTasks();
   }, []);
@@ -36,7 +42,9 @@ const Home = () => {
       <div className={styles.title} style={{ marginTop: '160px' }}>
         Welcome to frourio!
       </div>
-
+      <div className={styles.title} onClick={createRooms}>
+        ルーム作成
+      </div>
       <div className={styles.title}>
         <a href="/othello">othello</a>
       </div>
@@ -44,14 +52,17 @@ const Home = () => {
         <a href="/lobby">lobby</a>
       </div>
       <ul className={styles.tasks}>
-        {tasks.map((task) => (
-          <li key={task.id}>
-            <a href={`/othello?labels=${task.id}`}>
-              {task.id}
-              <div>{task.status}</div>
-            </a>
-          </li>
-        ))}
+        {tasks.map(
+          (task) =>
+            task.status !== 'ended' && (
+              <li key={task.id}>
+                <a href={`/othello?labels=${task.id}`}>
+                  {task.id}
+                  <div>{task.status}</div>
+                </a>
+              </li>
+            )
+        )}
       </ul>
     </>
   );
