@@ -1,6 +1,5 @@
-import type { TaskModel } from '$/commonTypesWithClient/models';
+import type { RoomModel } from '$/commonTypesWithClient/models';
 import { useAtom } from 'jotai';
-import type { ChangeEvent, FormEvent } from 'react';
 import { useEffect, useState } from 'react';
 import { Loading } from 'src/components/Loading/Loading';
 import { BasicHeader } from 'src/pages/@components/BasicHeader/BasicHeader';
@@ -11,30 +10,24 @@ import styles from './index.module.css';
 
 const Home = () => {
   const [user] = useAtom(userAtom);
-  const [tasks, setTasks] = useState<TaskModel[] | undefined>(undefined);
-  const [label, setLabel] = useState('');
-  const inputLabel = (e: ChangeEvent<HTMLInputElement>) => {
-    setLabel(e.target.value);
-  };
-  const fetchTasks = async () => {
-    const tasks = await apiClient.tasks.$get().catch(returnNull);
+  const [tasks, setTasks] = useState<RoomModel[] | undefined>(undefined);
 
+  const fetchTasks = async () => {
+    console.log('fetchTasks');
+    const tasks = await apiClient.tasks.$get().catch(returnNull);
+    console.table(tasks);
     if (tasks !== null) setTasks(tasks);
   };
-  const createTask = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!label) return;
+  // const createRoom = async (e: FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   await apiClient.tasks.$post({ body: { label } });
+  //   await fetchTasks();
+  //   setLabel('');
+  // };
 
-    await apiClient.tasks.post({ body: { label } });
-    setLabel('');
-    await fetchTasks();
-  };
-  const toggleDone = async (task: TaskModel) => {
-    await apiClient.tasks._taskId(task.id).patch({ body: { done: !task.done } });
-    await fetchTasks();
-  };
-  const deleteTask = async (task: TaskModel) => {
-    await apiClient.tasks._taskId(task.id).delete();
+  const createRooms = async () => {
+    console.log('createRooms');
+    await apiClient.rooms.$post();
     await fetchTasks();
   };
 
@@ -48,32 +41,56 @@ const Home = () => {
     <>
       <BasicHeader user={user} />
       <div className={styles.title} style={{ marginTop: '160px' }}>
-        Welcome to frourio!
+        欢迎访问! 特别感谢!
       </div>
 
-      <div className={styles.title}>
-        <a href="/othello">othello</a>
+      <div className="container p-8">
+        <ul className="grid grid-cols-5">
+          {tasks.map(
+            (task) =>
+              task.status !== 'ended' && (
+                <li key={task.id}>
+                  <a href={`/othello?labels=${task.id}`}>
+                    ID:{task.id}
+                    <div>{task.status === 'playing' ? '試合中' : '待機中'}</div>
+                  </a>
+                </li>
+              )
+          )}
+        </ul>
       </div>
 
-      <form style={{ textAlign: 'center', marginTop: '80px' }} onSubmit={createTask}>
-        <input value={label} type="text" onChange={inputLabel} />
-        <input type="submit" value="ADD" />
-      </form>
+      <div className={styles.title} onClick={createRooms}>
+        部屋建筑!
+      </div>
       <ul className={styles.tasks}>
-        {tasks.map((task) => (
-          <li key={task.id}>
-            <label>
-              <input type="checkbox" checked={task.done} onChange={() => toggleDone(task)} />
-              <span>{task.label}</span>
-            </label>
-            <input
-              type="button"
-              value="DELETE"
-              className={styles.deleteBtn}
-              onClick={() => deleteTask(task)}
-            />
-          </li>
-        ))}
+        部屋一覧!
+        {tasks.map(
+          (task) =>
+            task.status !== 'ended' && (
+              <li key={task.id}>
+                <a href={`/othello?labels=${task.id}`}>
+                  {task.id}
+                  <div>{task.status}</div>
+                </a>
+              </li>
+            )
+        )}
+        <div className={styles.title}>終試合一覧！</div>
+        <img src="https://ev-media.net/wp-content/uploads/2019/03/img_0e05202cec83ca7da073a3717d1986ea17110.jpg" />
+      </ul>
+      <ul className={styles.tasks}>
+        {tasks.map(
+          (task) =>
+            task.status === 'ended' && (
+              <li key={task.id}>
+                <a href={`/othello?labels=${task.id}`}>
+                  {task.id}
+                  <div>{task.status}</div>
+                </a>
+              </li>
+            )
+        )}
       </ul>
     </>
   );

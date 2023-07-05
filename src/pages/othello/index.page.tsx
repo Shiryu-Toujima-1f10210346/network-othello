@@ -1,7 +1,7 @@
 import type { RoomModel } from '$/commonTypesWithClient/models';
 import { useAtom } from 'jotai';
 import { useRouter } from 'next/router';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Loading } from 'src/components/Loading/Loading';
 import { BasicHeader } from 'src/pages/@components/BasicHeader/BasicHeader';
 import { apiClient } from 'src/utils/apiClient';
@@ -15,7 +15,6 @@ const Home = () => {
     const roomId = router.query.labels as string;
     await apiClient.rooms.board.$post({ body: { x, y, roomId } });
     await fetchBoard();
-    console.table(board);
   };
   const router = useRouter();
   const [user] = useAtom(userAtom);
@@ -25,20 +24,24 @@ const Home = () => {
   const [black, setBlack] = useState<number>();
   const [white, setWhite] = useState<number>();
 
-  const fetchBoard = async () => {
+  const fetchBoard = useCallback(async () => {
+    console.log('fetchBoard');
     const roomId = router.query.labels as string;
-    if (roomId === undefined) return;
-    const room = await apiClient.rooms.$get({ query: { roomId } }).catch(returnNull);
-    console.table(room);
+    if (!roomId || !user?.id) return;
+    const room = await apiClient.rooms
+      .$get({ query: { roomId, UserId: user.id } })
+      .catch(returnNull);
+
     if (room === null) {
       // const newRoom = await apiClient.rooms.$post();
       // setBoard(newRoom.board);
     } else {
       setBoard(room.board);
     }
+    console.table(room);
     fetchCount(room);
     fetchTurn(room);
-  };
+  }, [router.query.labels, user?.id]);
   const fetchCount = async (room: RoomModel | null) => {
     setRoomId(room?.id);
     let black = 0;
@@ -58,12 +61,11 @@ const Home = () => {
 
   useEffect(() => {
     const cancelID = setInterval(fetchBoard, 500);
-
     console.log('interval start');
     return () => {
       clearInterval(cancelID);
     };
-  }, []);
+  }, [fetchBoard]);
 
   if (!board || !user) return <Loading visible />;
 
@@ -82,6 +84,7 @@ const Home = () => {
           {turn === 1 ? '黒' : '白'}
           <span style={{ color: '#000000e4' }}>のターン</span>
         </div>
+
         <div className={styles.board}>
           {board.map((row, y) =>
             row.map((color, x) => (

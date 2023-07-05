@@ -1,7 +1,7 @@
 import type { UserId } from '$/commonTypesWithClient/branded';
 import type { RoomModel } from '$/commonTypesWithClient/models';
 import { roomsRepository } from '$/repository/roomsRepository';
-import { roomIdParser } from '$/service/idParsers';
+import { UserIdParser, roomIdParser } from '$/service/idParsers';
 import assert from 'assert';
 import { randomUUID } from 'crypto';
 import { boardUsecase } from './boardUsecase';
@@ -25,13 +25,14 @@ export const roomUsecase = {
       status: 'waiting',
       created: Date.now(),
       turn: 1,
+      blackUserId: UserIdParser.parse('0'),
+      whiteUserId: UserIdParser.parse('0'),
     };
     await roomsRepository.save(newRoom);
-
     return newRoom;
   },
   clickBoard: async (x: number, y: number, roomId: string, userId: UserId): Promise<RoomModel> => {
-    const room = await roomsRepository.findRoom(roomId);
+    const room = await roomsRepository.findRoom(roomId, userId);
     assert(room, 'curl叩くな！');
     const newBoard = await boardUsecase.clickBoard(x, y, room, userId);
     const newRoom: RoomModel = { ...room, board: newBoard, status: 'playing' };

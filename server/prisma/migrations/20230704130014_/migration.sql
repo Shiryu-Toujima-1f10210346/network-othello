@@ -1,0 +1,3 @@
+-- AlterTable
+ALTER TABLE "Room" ALTER COLUMN "blackUserId" DROP NOT NULL,
+ALTER COLUMN "whiteUserId" DROP NOT NULL;

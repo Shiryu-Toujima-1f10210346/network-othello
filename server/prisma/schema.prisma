@@ -15,12 +15,15 @@ model Task {
 }
 
 model Room {
-  userOnRoom UserOnRoom[]
-  roomId     String       @id
-  board      Json
-  status     String
-  createdAt  DateTime
-  turn       Int
+  userOnRoom  UserOnRoom[]
+  roomId      String       @id
+  board       Json
+  status      String
+  createdAt   DateTime
+  turn        Int
+  //blackUserIdはnullの場合がある
+  blackUserId String?
+  whiteUserId String?
 }
 
 model UserOnRoom {
