@@ -43,6 +43,23 @@ const Home = () => {
       <div className={styles.title} style={{ marginTop: '160px' }}>
         欢迎访问! 特别感谢!
       </div>
+
+      <div className="container p-8">
+        <ul className="grid grid-cols-5">
+          {tasks.map(
+            (task) =>
+              task.status !== 'ended' && (
+                <li key={task.id}>
+                  <a href={`/othello?labels=${task.id}`}>
+                    ID:{task.id}
+                    <div>{task.status === 'playing' ? '試合中' : '待機中'}</div>
+                  </a>
+                </li>
+              )
+          )}
+        </ul>
+      </div>
+
       <div className={styles.title} onClick={createRooms}>
         部屋建筑!
       </div>
